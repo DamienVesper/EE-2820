@@ -4,10 +4,16 @@
 #define BOT_LED_COUNT 1
 
 #include <FastLED.h>
-#include "LineFollower.h"
-#include "Servo.h"
+#include "LineSensor.h"
+#include <Servo.h>
 #include "Tractive.h"
 #include "Ultrasound.h"
+
+enum BotState {
+    Tracking,
+    Grabbing,
+    Grabbed
+};
 
 /**
  * @brief Singleton to condense access of all modules.
@@ -15,7 +21,7 @@
 class Bot {
 private:
     // Sensors.
-    LineFollower lineFollower;
+    LineSensor lineSensor;
     Ultrasound ultrasound;
 
     // Claw servo.
@@ -27,14 +33,16 @@ private:
     // FastLED colors.
     CRGB leds[BOT_LED_COUNT];
 
-    // constant values
-    static const uint8_t START_LED_PIN = 2;
-    static const uint8_t START_KEY_PIN = 3;
-
     /**
      * @brief Whether the program is active or not.
      */
     int active = 0;
+
+    BotState state = Tracking;
+
+    // Constant values.
+    static const uint8_t START_LED_PIN = 2;
+    static const uint8_t START_KEY_PIN = 3;
 
     /**
      * @brief Set the RGB of an LED via `FastLED`.
