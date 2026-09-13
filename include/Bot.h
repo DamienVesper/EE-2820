@@ -1,6 +1,8 @@
 #ifndef BOT_H
 #define BOT_H
 
+#define BOT_LED_COUNT 1
+
 #include <FastLED.h>
 #include "LineFollower.h"
 #include "Servo.h"
@@ -23,7 +25,7 @@ private:
     Tractive tractive;
 
     // FastLED colors.
-    CRGB leds[1];
+    CRGB leds[BOT_LED_COUNT];
 
     // constant values
     static const uint8_t START_LED_PIN = 2;
