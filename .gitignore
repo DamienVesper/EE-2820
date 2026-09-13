@@ -1,0 +1,7 @@
+# PlatformIO
+.pio/
+.cache/
+compile_commands.json
+
+# IDE garbage
+.vscode/
