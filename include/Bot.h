@@ -1,14 +1,25 @@
 #ifndef BOT_H
 #define BOT_H
 
-#define BOT_LED_COUNT 1
-
 #include <FastLED.h>
 #include "LineSensor.h"
 #include <Servo.h>
-#include "Tractive.h"
 #include "Ultrasound.h"
 
+/**
+ * @brief Number of LEDs (controllable by FastLED) on the bot.
+ */
+#define BOT_LED_COUNT 1
+/**
+ * @brief Minimum PWM to operate at.
+ * PWM Pins (3, 5, 6, 9, 10, 11).
+ * @link https://support.arduino.cc/hc/en-us/articles/9350537961500-Use-PWM-output-with-Arduino
+ */
+#define BOT_MOTOR_MIN_PWM 50
+
+/**
+ * @brief Current bot state to choose behavior.
+ */
 enum BotState {
     Tracking,
     Grabbing,
@@ -25,10 +36,7 @@ private:
     Ultrasound ultrasound;
 
     // Claw servo.
-    Servo servo;
-
-    // Motors.
-    Tractive tractive;
+    Servo claw;
 
     // FastLED colors.
     CRGB leds[BOT_LED_COUNT];
@@ -44,6 +52,11 @@ private:
     static const uint8_t START_LED_PIN = 2;
     static const uint8_t START_KEY_PIN = 3;
 
+    static const uint8_t SERVO_PIN = 5;
+
+    static constexpr const uint8_t MOTOR_PWM_PIN[4] = {10, 9, 6, 11};
+    static constexpr const uint8_t MOTOR_DIR_PIN[4] = {12, 8, 7, 13};
+
     /**
      * @brief Set the RGB of an LED via `FastLED`.
      * 
@@ -53,6 +66,22 @@ private:
      * @param b Blue color (0 - 255).
      */
     void setRGB(int idx, uint8_t r, uint8_t g, uint8_t b);
+
+    /**
+     * @brief Set PWM of all motors.
+     * @param motors Constant reference to an array of power for motors.
+     */
+    void setMotors(const int8_t (&motors)[4]);
+
+    /**
+     * @brief Set the bot's velocity.
+     * 
+     * @param speed The speed to set.
+     * @param angle The angle to apply the speed at.
+     * @param rotation The rotation direction.
+     * @param drift Whether you watch too much Fast & Furious or not.
+     */
+    void setVelocity(uint8_t speed, uint16_t angle, int8_t rotation, bool drift);
 public:
     Bot();
 
