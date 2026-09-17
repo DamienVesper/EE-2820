@@ -22,9 +22,7 @@
  */
 enum BotState {
     Tracking,
-    Turning, // At intersection.
-    Grabbing,
-    Grabbed
+    Turning // At intersection.
 };
 
 /**

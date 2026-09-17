@@ -76,16 +76,13 @@ void Bot::tick() {
             }
 
             if (this->lineSensor.ch1 == 1 && this->lineSensor.ch4 == 1) this->state = Turning;
+            claw.write(map(distance > 500 ? 500 : distance, 0, 500, 0, 80) + 90);
+
+            if (distance < 10) this->setRGB(0, 0, 0, 255);
             break;
         case Turning:
-            break;
-        case Grabbing:
-            if (distance >= 500) {
-                claw.write(90);
-            }
-            break;
-        case Grabbed:
-            this->setRGB(0, 0, 0, 255);
+            // TODO: Find a better condition to turn with.
+            while (distance >= 500) this->setVelocity(0, 80, 65, 0);
             break;
     };
 }
