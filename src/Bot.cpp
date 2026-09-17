@@ -1,9 +1,4 @@
 #include "Bot.h"
-#include "Arduino.h"
-#include <Servo.h>
-#include <FastLED.h>
-#include <Wire.h>
-#include <cstdint>
 
 void Bot::setup() {
     Serial.begin(9600);
@@ -32,6 +27,23 @@ void Bot::setMotors(const int8_t (&motors)[4]) {
 
 void Bot::setVelocity(uint8_t speed, uint16_t angle, int8_t rotation, bool drift) {
     int8_t velocity[4] = {0, 0, 0, 0};
+
+    float radAngle = angle * (PI / 180);
+    float speedFactor = rotation == 0 ? 1 : 0.5;
+
+    speed /= sqrt(2);
+
+    if (drift) {
+        velocity[0] = (speedFactor * (speed * sin(radAngle) - speed * cos(radAngle)));
+        velocity[1] = (speedFactor * (speed * sin(radAngle) + speed * cos(radAngle)));
+        velocity[2] = (speedFactor * (speed * sin(radAngle) - speed * cos(radAngle)) * (1 + rotation * 2));
+        velocity[3] = (speedFactor * (speed * sin(radAngle) + speed * cos(radAngle)) * (1 + rotation * 2));
+    } else {
+        velocity[0] = (speedFactor * (speed * sin(radAngle) - speed * cos(radAngle)) * (1 + rotation));
+        velocity[1] = (speedFactor * (speed * sin(radAngle) + speed * cos(radAngle)) * (1 + rotation));
+        velocity[2] = (speedFactor * (speed * sin(radAngle) - speed * cos(radAngle)) * (1 + rotation));
+        velocity[3] = (speedFactor * (speed * sin(radAngle) + speed * cos(radAngle)) * (1 + rotation));
+    }
 
     this->setMotors(velocity);
 }

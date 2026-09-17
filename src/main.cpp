@@ -1,5 +1,4 @@
 #include "Bot.h"
-#include <Arduino.h>
 
 Bot bot = Bot();
 
