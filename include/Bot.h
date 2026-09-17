@@ -22,6 +22,7 @@
  */
 enum BotState {
     Tracking,
+    Turning, // At intersection.
     Grabbing,
     Grabbed
 };
@@ -53,9 +54,6 @@ private:
     static const uint8_t START_KEY_PIN = 3;
 
     static const uint8_t SERVO_PIN = 5;
-
-    static constexpr const uint8_t MOTOR_PWM_PIN[4] = {10, 9, 6, 11};
-    static constexpr const uint8_t MOTOR_DIR_PIN[4] = {12, 8, 7, 13};
 
     /**
      * @brief Set the RGB of an LED via `FastLED`.

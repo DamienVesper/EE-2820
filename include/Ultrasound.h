@@ -35,8 +35,6 @@ private:
      */
     int cache[3];
 public:
-    Ultrasound();
-
     /**
      * @brief Obtain distance, in millimeters to an object from the ultrasound sensor.
      */

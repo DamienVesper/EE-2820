@@ -1,10 +1,6 @@
 #include "Ultrasound.h"
 #include <Wire.h>
 
-Ultrasound::Ultrasound() {
-    Wire.begin();
-}
-
 uint16_t Ultrasound::getDistance() {
     uint16_t distance = 0;
 

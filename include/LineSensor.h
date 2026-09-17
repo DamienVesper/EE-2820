@@ -16,8 +16,6 @@ public:
     int ch2;
     int ch3;
     int ch4;
-    
-    LineSensor();
 
     /**
      * @brief Update local sensor data.

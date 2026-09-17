@@ -1,4 +1,13 @@
 #include "Bot.h"
+#include <Wire.h>
+
+// i hate not having c++17 features.
+const uint8_t MOTOR_PWM_PIN[4] = {10, 9, 6, 11};
+const uint8_t MOTOR_DIR_PIN[4] = {12, 8, 7, 13};
+
+Bot::Bot() {
+    Wire.begin();
+}
 
 void Bot::setup() {
     Serial.begin(9600);
@@ -54,14 +63,36 @@ void Bot::tick() {
 
     int distance = this->ultrasound.getDistance();
 
-    if (distance >= 500) {
-        claw.write(90);
-    }
+    switch (this->state) {
+        case Tracking:
+
+            if (this->lineSensor.ch2 == 1 && this->lineSensor.ch3 == 1) this->setVelocity(0, 80, 0, 0);
+            if (this->lineSensor.ch2 == 1 && this->lineSensor.ch3 == 0) this->setVelocity(0, 80, 65, 0);
+            if (this->lineSensor.ch2 == 0 && this->lineSensor.ch3 == 1) this->setVelocity(0, 80, -65, 0);
+
+            while (this->lineSensor.ch2 == 0 && this->lineSensor.ch3 == 0) {
+                this->setVelocity(0, 0, 0, 0);
+                this->lineSensor.update();
+            }
+
+            if (this->lineSensor.ch1 == 1 && this->lineSensor.ch4 == 1) this->state = Turning;
+            break;
+        case Turning:
+            break;
+        case Grabbing:
+            if (distance >= 500) {
+                claw.write(90);
+            }
+            break;
+        case Grabbed:
+            this->setRGB(0, 0, 0, 255);
+            break;
+    };
 }
 
 void Bot::loop() {
     if (!active) {
         active = analogRead(START_KEY_PIN);
-        if (active) this->setRGB(0, 0, 255, 0);
+        if (active) this->setRGB(0, 0, 0, 255);
     } else this->tick();
 }

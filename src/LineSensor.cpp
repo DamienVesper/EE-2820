@@ -1,8 +1,6 @@
 #include "LineSensor.h"
 #include <Wire.h>
 
-LineSensor::LineSensor() {}
-
 bool LineSensor::update() {
     Wire.beginTransmission(LINE_SENSOR_I2C_ADDR);
     Wire.write(LINE_SENSOR_REG);
