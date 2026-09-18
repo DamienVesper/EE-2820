@@ -43,7 +43,8 @@ private:
     /**
      * @brief Whether the program is active or not.
      */
-    int active = 0;
+    int active = false;
+    bool keyState;
 
     BotState state = Tracking;
 
@@ -64,6 +65,15 @@ private:
     void setRGB(int idx, uint8_t r, uint8_t g, uint8_t b);
 
     /**
+     * @brief Set the RGB of the onboard LED via `FastLED`.
+     * 
+     * @param r Red color (0 - 255).
+     * @param g Green color (0 - 255).
+     * @param b Blue color (0 - 255).
+     */
+    void setRGB(uint8_t r, uint8_t g, uint8_t b);
+
+    /**
      * @brief Set PWM of all motors.
      * @param motors Constant reference to an array of power for motors.
      */
@@ -79,8 +89,6 @@ private:
      */
     void setVelocity(uint8_t speed, uint16_t angle, int8_t rotation, bool drift);
 public:
-    Bot();
-
     /**
      * @brief Loop logic when program is running. Kept outside of loop() for indentation reasons.
      */

@@ -11,10 +11,10 @@ bool LineSensor::update() {
     if (Wire.available() >= 1) {
         uint8_t data = Wire.read();
 
-        ch1 = data & 1;
-        ch2 = (data >> 1) & 1;
-        ch3 = (data >> 2) & 1;
-        ch4 = (data >> 3) & 1;
+        ch1 = data & 0x01;
+        ch2 = (data >> 1) & 0x01;
+        ch3 = (data >> 2) & 0x01;
+        ch4 = (data >> 3) & 0x01;
 
         return true;
     }

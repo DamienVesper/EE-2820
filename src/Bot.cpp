@@ -1,29 +1,38 @@
 #include "Bot.h"
+#include "Arduino.h"
 #include <Wire.h>
 
 // i hate not having c++17 features.
 const uint8_t MOTOR_PWM_PIN[4] = {10, 9, 6, 11};
 const uint8_t MOTOR_DIR_PIN[4] = {12, 8, 7, 13};
 
-Bot::Bot() {
-    Wire.begin();
-}
-
 void Bot::setup() {
     Serial.begin(9600);
 
     pinMode(START_KEY_PIN, INPUT);
-    FastLED.addLeds<WS2812, START_LED_PIN>(leds, 1);
-    this->setRGB(0, 255, 0, 0);
+    FastLED.addLeds<WS2812, START_LED_PIN, GRB>(leds, 1);
+    this->setRGB(255, 0, 0);
 
     claw.attach(SERVO_PIN);
     claw.write(170);
+
+    Wire.begin();
 }
 
 void Bot::setRGB(int idx, uint8_t r, uint8_t g, uint8_t b) {
     this->leds[idx].r = r;
     this->leds[idx].g = g;
     this->leds[idx].b = b;
+
+    FastLED.show();
+}
+
+void Bot::setRGB(uint8_t r, uint8_t g, uint8_t b) {
+    this->leds[0].r = r;
+    this->leds[0].g = g;
+    this->leds[0].b = b;
+
+    FastLED.show();
 }
 
 void Bot::setMotors(const int8_t (&motors)[4]) {
@@ -60,36 +69,45 @@ void Bot::setVelocity(uint8_t speed, uint16_t angle, int8_t rotation, bool drift
 void Bot::tick() {
     // Update sensor data.
     this->lineSensor.update();
-
-    int distance = this->ultrasound.getDistance();
+    int distance = this->ultrasound.avgDistance();
 
     switch (this->state) {
         case Tracking:
-
-            if (this->lineSensor.ch2 == 1 && this->lineSensor.ch3 == 1) this->setVelocity(0, 80, 0, 0);
-            if (this->lineSensor.ch2 == 1 && this->lineSensor.ch3 == 0) this->setVelocity(0, 80, 65, 0);
-            if (this->lineSensor.ch2 == 0 && this->lineSensor.ch3 == 1) this->setVelocity(0, 80, -65, 0);
+            if (this->lineSensor.ch2 == 1 && this->lineSensor.ch3 == 1) this->setVelocity(80, 0, 0, 0);
+            if (this->lineSensor.ch2 == 1 && this->lineSensor.ch3 == 0) this->setVelocity(80, 0, 65, 0);
+            if (this->lineSensor.ch2 == 0 && this->lineSensor.ch3 == 1) this->setVelocity(80, 0, -65, 0);
 
             while (this->lineSensor.ch2 == 0 && this->lineSensor.ch3 == 0) {
-                this->setVelocity(0, 0, 0, 0);
                 this->lineSensor.update();
+                this->ultrasound.setRGB(255, 255, 255);
+                this->setVelocity(0, 0, 0, 0);
             }
 
             if (this->lineSensor.ch1 == 1 && this->lineSensor.ch4 == 1) this->state = Turning;
-            claw.write(map(distance > 500 ? 500 : distance, 0, 500, 0, 80) + 90);
+            else {
+                claw.write(map(distance > 500 ? 500 : distance, 0, 500, 0, 40) + 90);
 
-            if (distance < 10) this->setRGB(0, 0, 0, 255);
+                if (distance < 50) this->ultrasound.setRGB(0, 0, 255);
+                else this->ultrasound.setRGB(0, 255, 0);
+            }
             break;
         case Turning:
-            // TODO: Find a better condition to turn with.
-            while (distance >= 500) this->setVelocity(0, 80, 65, 0);
+            this->setVelocity(0, 0, 0, 0);
+            delay(300);
+            this->setVelocity(0, 0, -65, 0);
+            delay(500);
+
+            this->state = Tracking;
             break;
     };
 }
 
 void Bot::loop() {
-    if (!active) {
-        active = analogRead(START_KEY_PIN);
-        if (active) this->setRGB(0, 0, 0, 255);
-    } else this->tick();
+    keyState = analogRead(START_KEY_PIN);
+    if (!keyState) active = 1;
+
+    if (active) {
+        this->setRGB(0, 255, 0);
+        this->tick();
+    }
 }
