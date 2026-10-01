@@ -13,9 +13,6 @@ void Bot::setup() {
     FastLED.addLeds<WS2812, START_LED_PIN, GRB>(leds, 1);
     this->setRGB(255, 0, 0);
 
-    claw.attach(SERVO_PIN);
-    claw.write(170);
-
     Wire.begin();
 }
 
@@ -85,8 +82,6 @@ void Bot::tick() {
 
             if (this->lineSensor.ch1 == 1 && this->lineSensor.ch4 == 1) this->state = Turning;
             else {
-                claw.write(map(distance > 500 ? 500 : distance, 0, 500, 0, 40) + 90);
-
                 if (distance < 50) this->ultrasound.setRGB(0, 0, 255);
                 else this->ultrasound.setRGB(0, 255, 0);
             }

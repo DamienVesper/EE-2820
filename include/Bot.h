@@ -3,7 +3,6 @@
 
 #include <FastLED.h>
 #include "LineSensor.h"
-#include <Servo.h>
 #include "Ultrasound.h"
 
 /**
@@ -34,9 +33,6 @@ private:
     LineSensor lineSensor;
     Ultrasound ultrasound;
 
-    // Claw servo.
-    Servo claw;
-
     // FastLED colors.
     CRGB leds[BOT_LED_COUNT];
 
@@ -51,8 +47,6 @@ private:
     // Constant values.
     static const uint8_t START_LED_PIN = 2;
     static const uint8_t START_KEY_PIN = 3;
-
-    static const uint8_t SERVO_PIN = 5;
 
     /**
      * @brief Set the RGB of an LED via `FastLED`.
