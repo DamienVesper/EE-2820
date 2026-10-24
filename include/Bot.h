@@ -21,7 +21,9 @@
  */
 enum BotState {
     Tracking,
-    Turning // At intersection.
+    Turning, // Only when intercepting the tape line.
+    Picking,
+    Dropping
 };
 
 /**
@@ -35,6 +37,9 @@ private:
 
     // FastLED colors.
     CRGB leds[BOT_LED_COUNT];
+
+    int posX = 0;
+    int posY = 0;
 
     /**
      * @brief Whether the program is active or not.

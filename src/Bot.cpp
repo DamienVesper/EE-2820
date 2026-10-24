@@ -68,6 +68,8 @@ void Bot::tick() {
     this->lineSensor.update();
     int distance = this->ultrasound.avgDistance();
 
+    // this->setVelocity(50, 0, 0, false);
+
     switch (this->state) {
         case Tracking:
             if (this->lineSensor.ch2 == 1 && this->lineSensor.ch3 == 1) this->setVelocity(80, 0, 0, 0);
@@ -93,6 +95,10 @@ void Bot::tick() {
             delay(500);
 
             this->state = Tracking;
+            break;
+        case Picking:
+            break;
+        case Dropping:
             break;
     };
 }
