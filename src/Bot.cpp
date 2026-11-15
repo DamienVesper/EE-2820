@@ -10,10 +10,16 @@ void Bot::setup() {
     Serial.begin(9600);
 
     pinMode(START_KEY_PIN, INPUT);
+    pinMode(BOT_MAGNET_PIN, LOW);
+
     FastLED.addLeds<WS2812, START_LED_PIN, GRB>(leds, 1);
     this->setRGB(255, 0, 0);
 
     Wire.begin();
+}
+
+void Bot::setMagnet(bool state) {
+    digitalWrite(BOT_MAGNET_PIN, state ? HIGH : LOW);
 }
 
 void Bot::setRGB(int idx, uint8_t r, uint8_t g, uint8_t b) {

@@ -15,6 +15,10 @@
  * @link https://support.arduino.cc/hc/en-us/articles/9350537961500-Use-PWM-output-with-Arduino
  */
 #define BOT_MOTOR_MIN_PWM 50
+/**
+ * @brief Bot Magnet pin.
+ */
+#define BOT_MAGNET_PIN 4
 
 /**
  * @brief Current bot state to choose behavior.
@@ -71,6 +75,13 @@ private:
      * @param b Blue color (0 - 255).
      */
     void setRGB(uint8_t r, uint8_t g, uint8_t b);
+
+    /**
+     * @brief Toggle magnet state.
+     * 
+     * @param state `true` if high, `false` if low.
+     */
+    void setMagnet(bool state);
 
     /**
      * @brief Set PWM of all motors.
