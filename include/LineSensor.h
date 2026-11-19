@@ -1,11 +1,4 @@
-#ifndef LINE_SENSOR_H
-#define LINE_SENSOR_H
-
-#define LINE_SENSOR_I2C_ADDR 0x78
-/**
- * @brief The register address of the line sensor.
- */
-#define LINE_SENSOR_REG 0x01
+#pragma once
 
 class LineSensor {
 public:
@@ -21,5 +14,3 @@ public:
      */
     bool update();
 };
-
-#endif

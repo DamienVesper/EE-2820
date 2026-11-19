@@ -1,13 +1,14 @@
 #include "LineSensor.h"
+#include "Config.h"
 #include <Wire.h>
 
 bool LineSensor::update() {
-    Wire.beginTransmission(LINE_SENSOR_I2C_ADDR);
-    Wire.write(LINE_SENSOR_REG);
+    Wire.beginTransmission(Sensors::LINE_ADDR);
+    Wire.write(Sensors::LINE_REG);
 
     if (Wire.endTransmission() != 0) return false;
 
-    Wire.requestFrom(LINE_SENSOR_I2C_ADDR, 1);
+    Wire.requestFrom(Sensors::LINE_ADDR, (uint8_t)1);
     if (Wire.available() >= 1) {
         uint8_t data = Wire.read();
 

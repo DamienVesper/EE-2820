@@ -1,28 +1,6 @@
-#ifndef ULTRASOUND_H
-#define ULTRASOUND_H
+#pragma once
 
 #include <Arduino.h>
-
-/**
- * @brief The I2C address of the ultrasound sensor.
- */
-#define ULTRASOUND_I2C_ADDR 0x77
-/**
- * @brief The register address of the IR sensor.
- */
-#define ULTRASOUND_IR_REG 0x01
-/**
- * @brief The register address of the left LED.
- */
-#define ULTRASOUND_LED_L_REG 0x02
-/**
- * @brief The register address of the right LED.
- */
-#define ULTRASOUND_LED_R_REG 0x03
-/**
- * @brief The maximum number of distances that can be stored in cache.
- */
-#define ULTRASOUND_CACHE_SIZE 3
 
 /**
  * @brief Interface for Hiwonder Glowy Ultrasonic Sensor (HW-SR06).
@@ -66,5 +44,3 @@ public:
      */
     bool setRGB(uint8_t r, uint8_t g, uint8_t b);
 };
-
-#endif
