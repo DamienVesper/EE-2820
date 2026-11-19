@@ -27,6 +27,29 @@ void Controller::update() {
         sonar.getDistance();
     }
 
+    // Update line following sensor.
+    if (now - lastSensorUpdate >= Sensors::UPDATE_INTERVAL) {
+        lastSensorUpdate = now;
+        line.update();
+
+        // if (now - )
+    }
+
+    switch (state) {
+        case State::WAIT_START: {
+            setState(State::ACQUIRE_TAPE);
+            break;
+        }
+        case State::ACQUIRE_TAPE: {
+            if (line.ch2 && line.ch3) {
+                drivetrain.stop();
+                setState(State::FOLLOW_TAPE_OUT);
+            }
+            break;
+        }
+    }
+
+
     if (buttonPressed()) {
         if (state == State::WAIT_START || state == State::COMPLETE) start();
         else if (state != State::FAULT) {

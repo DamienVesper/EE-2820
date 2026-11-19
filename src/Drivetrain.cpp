@@ -13,7 +13,7 @@ void Drivetrain::motor(uint8_t i, int16_t cmd) {
     }
 
     digitalWrite(Pins::MOTOR_DIR[i], cmd > 0 ? polarity[i] : !polarity[i]);
-    analogWrite(Pins::MOTOR_PWM[i], map(abs(cmd), 1, 100, 50, 255));
+    analogWrite(Pins::MOTOR_PWM[i], map(abs(cmd), 0, 100, 50, 255));
 }
 
 void Drivetrain::init() {
