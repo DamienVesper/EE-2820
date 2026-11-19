@@ -106,4 +106,6 @@ namespace Sensors {
      * @brief The address of the line following sensor register.
      */
     constexpr uint8_t LINE_REG = 0x01;
+    constexpr uint16_t UPDATE_INTERVAL = 10;
+    constexpr uint16_t US_INTERVAL = 80;
 }

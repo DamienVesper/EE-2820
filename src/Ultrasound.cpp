@@ -1,9 +1,10 @@
-#include "Config.h"
-#include "Ultrasound.h"
+#include <Arduino.h>
 #include <Wire.h>
 
+#include "Config.h"
+#include "Ultrasound.h"
+
 uint16_t Ultrasound::getDistance() {
-    uint16_t distance = 0;
 
     Wire.beginTransmission(Sensors::US_ADDR);
     Wire.write(Sensors::US_DIST_REG);

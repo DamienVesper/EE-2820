@@ -1,17 +1,17 @@
-#include "Bot.h"
+#include "Controller.h"
 
-Bot bot = Bot();
+Controller controller;
 
 /**
  * @brief Called once at the beginning of program invocation. 
  */
 void setup() {
-    bot.setup();
+    controller.init();
 }
 
 /**
  * @brief Called repeatedly throughout the lifetime of the program.
  */
 void loop() {
-    bot.loop();
+    controller.update();
 }

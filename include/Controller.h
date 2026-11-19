@@ -2,8 +2,8 @@
 
 #include <Arduino.h>
 
+#include "Drivetrain.h"
 #include "Electromagnet.h"
-#include "Motors.h"
 #include "LineSensor.h"
 #include "Ultrasound.h"
 
@@ -32,8 +32,24 @@ private:
     State state = State::WAIT_START;
     State memoryState = State::WAIT_START;
 
-    Motors motors;
+    Drivetrain drivetrain;
     LineSensor line;
     Ultrasound sonar;
     Electromagnet magnet;
+
+    // Timers! I love timers (I hate timers in C++ but I love timers everywhere else!).
+    uint32_t
+        lastSensorUpdate = 0,
+        lastSonarUpdate = 0;
+
+    bool buttonLastState = HIGH;
+    bool buttonCurrentState = HIGH;
+
+    void start();
+    void stop();
+    void followLine();
+    void setState (State state);
+
+    bool buttonPressed();
+    bool checkForObstacles() const;
 };

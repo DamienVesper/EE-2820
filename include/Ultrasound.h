@@ -14,6 +14,12 @@ private:
     int cache[3];
 public:
     /**
+     * @brief I do not care that this is not recommended in C++. I want to pass this class.
+     * 
+     */
+    uint16_t distance;
+
+    /**
      * @brief Obtain distance, in millimeters to an object from the ultrasound sensor.
      */
     uint16_t getDistance();
